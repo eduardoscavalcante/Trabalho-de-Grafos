@@ -11,41 +11,41 @@
 
 FILE *file;
 int n,m;
-int grafo[MAX][MAX], distanciaMinima[MAX][MAX];
+int grafo[MAX][MAX], distancia[MAX][MAX];
 
-void imprimir(int distanciaMinima[][MAX]) {
+void imprimir(int distancia[][MAX]) {
     printf("\nA matriz seguinte mostra a distância mínima entre cada par de vértices,");
     printf("\napós o cálculo de distâncias do algoritmo Floyd Warshall.\n");
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-        if (distanciaMinima[i][j] == INF)
+        if (distancia[i][j] == INF)
             printf("%4s", "INF");
         else
-            printf("%4d", distanciaMinima[i][j]);
+            printf("%4d", distancia[i][j]);
         }
         printf("\n");
     }
 }
 
-void floydWarshall(int dist[][MAX]) {
+void floydWarshall(int matriz[][MAX]) {
     int i, j, k;
 
     for (i = 0; i < n; i++)
         for (j = 0; j < n; j++)
-        distanciaMinima[i][j] = dist[i][j];
+        distancia[i][j] = matriz[i][j];
 
     for (k = 0; k < n; k++) {
         for (i = 0; i < n; i++) {
             for (j = 0; j < n; j++) {
-                if (distanciaMinima[i][k] + distanciaMinima[k][j] < distanciaMinima[i][j])
-                distanciaMinima[i][j] = distanciaMinima[i][k] + distanciaMinima[k][j];
+                if (distancia[i][k] + distancia[k][j] < distancia[i][j])
+                distancia[i][j] = distancia[i][k] + distancia[k][j];
             }
         }
     }
     printf("\n\n");
 
-    imprimir(distanciaMinima);
+    imprimir(distancia);
 }
 
 int main(int argc, char *argv[])
