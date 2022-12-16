@@ -1,1 +1,5 @@
 Os códigos necessitam do parâmetro '-f arquivo.txt' para escolher o arquivo de entrada.
+Os demais parâmetros não foram adicionados, mas funcionam em parte dentro do próprio programa.
+
+Todos os programas foram feitos em linguagem C, e são compilados como, por exemplo, 'gcc programa.c -o tituloExecutavel'
+e executados com './tituloExecutavel -f arquivo.txt', sendo "arquivo.txt" o nome escolhido para o arquivo de entrada preenchido.
