@@ -12,56 +12,55 @@
 FILE *file;
 int n,m;
 int grafo[MAX][MAX];
-void dijkstra(int grafo [MAX][MAX], int n, int inicio, int destino , int *custos){
-    int i, v, mindist, ant[MAX],visitados[MAX],dist[MAX];
-     for (i=0;i<n;i++) {
-    if (custos[(inicio-1)*n+i]!=-1) {
-      ant[i]=inicio-1; 
-      dist[i]=custos[(inicio-1)*n+i];
+
+void dijkstra(int grafo [][MAX], int inicio, int destino){
+    int mindist, c, custo[MAX][MAX], ant[MAX],visitados[MAX],dist[MAX], prox;
+
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++)
+        if (grafo[i][j] == 0)
+            custo[i][j] = INF;
+        else
+            custo[i][j] = grafo[i][j];
     }
-    else {
-      ant[i]=-1;
-      dist[i]=INF;
+
+    for (int i = 0; i < n; i++) {
+        dist[i] = custo[inicio][i];
+        ant[i] = inicio;
+        visitados[i] = 0;
     }
-    visitados[i]=0;
-  }
-  visitados[inicio-1]=1;
-  dist[inicio-1]=0;
-    do {
-         mindist= INF;
-    for (i=0;i<n;i++)
-      if (!visitados[i])
-        if (dist[i]>=0 && dist[i]<mindist) {mindist=dist[i];v=i;}
-          if (mindist!=INF && v!=destino-1) {
-      visitados[v]=1;
-      for (i=0;i<n;i++)
-        if (!visitados[i]) {
-          if (custos[v*n+i]!=-1 && dist[v]+custos[v*n+i]<dist[i])
-            { dist[i]=dist[v]+custos[v*n+i];ant[i]=v; }
+
+    dist[inicio] = 0;
+    visitados[inicio] = 1;
+    c = 1;
+
+    while (c < n - 1) {
+        mindist = INF;
+
+        for (int i = 0; i < n; i++)
+        
+        if (dist[i] < mindist && !visitados[i]) {
+            mindist = dist[i];
+            prox = i;
         }
+
+        visitados[prox] = 1;
+        for (int i = 0; i < n; i++)
+        if (!visitados[i]){
+            if (mindist + custo[prox][i] < dist[i]) {
+                dist[i] = mindist + custo[prox][i];
+                ant[i] = prox;
+            }
+        }
+        c++;
     }
-  } while (v!=destino-1 && mindist!=INF);
-   if (mindist==INF)
-    printf("\nNão existe caminho entre %d e %d !!\n",inicio,destino);
-  else {
-    printf("\nO caminho mínimo entre os vértices %d e %d  é :\n",
-           inicio,destino);
-    i=destino;
-    printf("%d",i);
-    i=ant[i-1];
-    while (i!=-1) {
-      printf("<-%d",i+1);
-      i=ant[i];
-    }
-   
-    printf("\nO custo deste caminho é: %d\n",(int) dist[destino-1]);
-  }
-  
+    
+    printf("A distância mínima de %d para %d é: %d\n", inicio+1, destino+1, dist[destino]);
+    
 }
- int main(int argc, char *argv[]){
-  int v1, v2, w, inicio, destino ;
-  int grafo[MAX][MAX];
-  int *custos = NULL;
+
+int main(int argc, char *argv[]){
+    int v1, v2, w, inicio, destino ;
 
     if (argc == 1){
         printf("\nAdicione um texto de entrada! (ex: -f entrada.txt)\n");
@@ -94,16 +93,23 @@ void dijkstra(int grafo [MAX][MAX], int n, int inicio, int destino , int *custos
                             grafo[i][j]=INF;
                         }
                     }
-                   
-                    for (int j=0; j<m; j++ ){
-                
-                 fscanf(file, "%d %d %d" , &v1, &v2, &w);
-	                    grafo[v1-1][v2-1] = w;
-	                    grafo[v2-1][v1-1] = w;
                 }
-           break;
-		}
-        dijkstra(grafo,n,inicio , destino, custos);
-	}
- }
+                    
+                for (int j=0; j<m; j++ ){
+                    fscanf(file, "%d %d %d" , &v1, &v2, &w);
+	                grafo[v1-1][v2-1] = w;
+	                grafo[v2-1][v1-1] = w;
+                }
+            break;
+	    }
+    }
+
+    printf("\nDigite o vértice inicial: ");
+    scanf("%d", &inicio);
+
+    printf("\nDigite o vértice final: ");
+    scanf("%d", &destino);
+
+    dijkstra(grafo, inicio-1, destino-1);
+    return 0;
  }
